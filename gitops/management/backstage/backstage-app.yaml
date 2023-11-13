@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backstage
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: backstage=052848974346.dkr.ecr.eu-central-1.amazonaws.com/backstage:latest
+    argocd-image-updater.argoproj.io/backstage.update-strategy: digest
+    argocd-image-updater.argoproj.io/backstage.helm.image-tag: backstage.image.tag
+spec:
+  destination:
+    namespace: backstage
+    server: https://kubernetes.default.svc
+  project: infra
+  # sources:
+  source:
+    repoURL: 'https://backstage.github.io/charts'
+    targetRevision: 1.6.1
+    chart: backstage
+    helm:
+      values: |
+        # because of bug in argocd when we use multiple sources
+        # https://github.com/argoproj-labs/argocd-image-updater/pull/548
+        backstage:
+          command: ["node", "packages/backend", "--config", "app-config.yaml", "--config", "app-config.production.yaml"]
+          image:
+            registry: 052848974346.dkr.ecr.eu-central-1.amazonaws.com
+            repository: backstage
+            pullPolicy: Always
+          extraEnvVarsSecrets:
+          - global-secret
+      #valueFiles:
+      #- $values/gitops/management/backstage/backstage-values.yaml
+  #- repoURL: https://github.com/my-backstage-demo/backstage-infrastructure-provisioning-templates-workshop.git
+  #  targetRevision: main
+  #  ref: values
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - ServerSideApply=true
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backstage-config
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+spec:
+  destination:
+    namespace: backstage
+    server: https://kubernetes.default.svc
+  project: infra
+  source:
+    path: "gitops/management/backstage/config"
+    targetRevision: main
+    directory:
+      recurse: true
+    repoURL: https://github.com/my-backstage-demo/backstage-infrastructure-provisioning-templates-workshop.git
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

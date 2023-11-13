@@ -4,3 +4,26 @@ configs:
     argocdServerAdminPasswordMtime: "2023-11-13T09:23:16Z"
   params:
     server.insecure: true
+
+  repositories:
+    pulumi-oci:
+      url: ghcr.io/pulumi/helm-charts
+      type: helm
+      name: pulumi-kubernetes-operator
+      enableOCI: "true"
+
+global:
+  additionalLabels:
+    backstage.io/kubernetes-id: gitops-cluster
+  podLabels:
+    backstage.io/kubernetes-id: gitops-cluster
+
+
+server:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1024Mi

@@ -1,20 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kyverno
+  name: pulumi-operator
   namespace: argocd
 spec:
   destination:
-    namespace: compliance
+    namespace: pulumi-operator
     server: https://kubernetes.default.svc
   project: infra
   sources:
-  - repoURL: 'https://kyverno.github.io/kyverno/'
-    targetRevision: 3.1.4
-    chart: kyverno
+  - repoURL: ghcr.io/pulumi/helm-charts
+    targetRevision: 0.2.0
+    chart: pulumi-kubernetes-operator
     helm:
       valueFiles:
-      - $values/gitops/management/kyverno/kyverno-values.yaml
+      - $values/gitops/management/pulumi-operator/pulumi-operator-values.yaml
   - repoURL: https://github.com/my-backstage-demo/backstage-infrastructure-provisioning-templates-workshop.git
     targetRevision: main
     ref: values
@@ -24,22 +24,21 @@ spec:
       selfHeal: true
     syncOptions:
     - ServerSideApply=true
-    - CreateNamespace=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kyverno-policies
+  name: pulumi-operator-config
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "5"
 spec:
   destination:
-    namespace: compliance
+    namespace: pulumi-operator
     server: https://kubernetes.default.svc
   project: infra
   source:
-    path: "gitops/management/kyverno/policies"
+    path: "gitops/management/pulumi-operator/config"
     targetRevision: main
     directory:
       recurse: true
