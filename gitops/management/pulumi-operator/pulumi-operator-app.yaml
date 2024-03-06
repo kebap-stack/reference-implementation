@@ -10,7 +10,7 @@ spec:
   project: infra
   sources:
   - repoURL: ghcr.io/pulumi/helm-charts
-    targetRevision: 0.2.0
+    targetRevision: 0.7.1
     chart: pulumi-kubernetes-operator
     helm:
       valueFiles:

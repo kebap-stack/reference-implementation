@@ -1,13 +1,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ${{values.name}}-${{values.stage}}-vc
+  name: ${{values.name}}-${{values.stage}}-${{parameters.owner}}
   namespace: argocd
 spec:
   destination:
     namespace: ${{values.name}}-${{values.stage}}
     server: https://kubernetes.default.svc
-  project: clusters
+  project: ${{parameters.owner}}
   source:
     repoURL: 'https://charts.loft.sh/'
     targetRevision: 0.19.3

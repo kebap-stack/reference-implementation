@@ -6,7 +6,6 @@ config:
     ping: yes
     insecure: no
     credentials: ext:/scripts/ecr-login.sh
-    credsexpire: 10h
 
 authScripts:
   enabled: true

@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ${{values.name}}-${{values.stage}}
+  namespace: argocd
+spec:
+  destination:
+    namespace: pulumi-operator
+    server: https://kubernetes.default.svc
+  project: ${{values.owner}}
+  source:
+    path: "gitops/teams/clusters/${{values.name}}-${{values.stage}}-cluster"
+    targetRevision: main
+    repoURL: https://github.com/my-backstage-demo/backstage-infrastructure-provisioning-templates-workshop.git
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - ServerSideApply=true
+    - CreateNamespace=true

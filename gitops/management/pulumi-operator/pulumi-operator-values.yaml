@@ -4,5 +4,11 @@ extraEnv:
     secretKeyRef:
       key: pulumi-access-token
       name: global-secret
+- name: DIGITALOCEAN_TOKEN
+  valueFrom:
+    secretKeyRef:
+      key: do-token
+      name: global-secret
 
 fullnameOverride: pulumi-operator
+createClusterRole: true
