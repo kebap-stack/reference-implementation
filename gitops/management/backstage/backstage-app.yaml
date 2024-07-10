@@ -15,7 +15,7 @@ spec:
   # sources:
   source:
     repoURL: 'https://backstage.github.io/charts'
-    targetRevision: 1.6.1
+    targetRevision: 1.9.5
     chart: backstage
     helm:
       values: |
@@ -27,8 +27,11 @@ spec:
             registry: 052848974346.dkr.ecr.eu-central-1.amazonaws.com
             repository: backstage
             pullPolicy: Always
+          extraEnvVars:
+            - name: NODE_ENV
+              value: development
           extraEnvVarsSecrets:
-          - global-secret
+          - backstage-global-secrets
       #valueFiles:
       #- $values/gitops/management/backstage/backstage-values.yaml
   #- repoURL: https://github.com/my-backstage-demo/backstage-infrastructure-provisioning-templates-workshop.git

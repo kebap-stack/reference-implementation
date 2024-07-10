@@ -5,4 +5,7 @@ backstage:
     repository: backstage
     pullPolicy: Always
   extraEnvVarsSecrets:
-  - global-secret
+  - backstage-global-secrets
+  extraEnvVars:
+  - name: NODE_ENV
+    value: development
