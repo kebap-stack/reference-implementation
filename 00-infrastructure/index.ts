@@ -82,7 +82,7 @@ const cluster = new eks.Cluster("eks-cluster", {
 const podIdentityAddon = new aws.eks.Addon("pod-identity", {
     clusterName: cluster.eksCluster.name,
     addonName: "eks-pod-identity-agent",
-    addonVersion: "v1.2.0-eksbuild.1",
+    addonVersion: "v1.3.0-eksbuild.1",
     resolveConflictsOnCreate: "OVERWRITE",
     resolveConflictsOnUpdate: "OVERWRITE",
 });

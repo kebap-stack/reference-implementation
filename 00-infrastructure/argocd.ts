@@ -23,7 +23,7 @@ export class ArgoCD extends pulumi.ComponentResource {
 
         const argocd = new k8s.helm.v3.Release("argocd", {
             chart: "argo-cd",
-            version: "6.7.12",
+            version: "7.3.4",
             repositoryOpts: {
                 repo: "https://argoproj.github.io/argo-helm",
             },
